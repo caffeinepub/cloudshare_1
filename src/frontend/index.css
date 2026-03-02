@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Figtree (body) ── */
+@font-face {
+  font-family: "Figtree";
+  src: url("/assets/fonts/Figtree.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Plus Jakarta Sans (display) ── */
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/assets/fonts/PlusJakartaSans.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --radius: 1rem;
+
+    /* CloudShare Pastel Blue Palette */
+    /* background: near-white with blue tint */
+    --background: 0.974 0.012 220;
+    /* foreground: deep slate-blue */
+    --foreground: 0.26 0.04 230;
+
+    /* card: white */
+    --card: 0.995 0.004 220;
+    --card-foreground: 0.26 0.04 230;
+
+    /* popover */
+    --popover: 0.995 0.004 220;
+    --popover-foreground: 0.26 0.04 230;
+
+    /* primary: soft medium blue */
+    --primary: 0.58 0.13 228;
+    --primary-foreground: 0.98 0.005 220;
+
+    /* secondary: very pale blue */
+    --secondary: 0.93 0.03 220;
+    --secondary-foreground: 0.35 0.06 228;
+
+    /* muted: pale blue-gray */
+    --muted: 0.945 0.018 220;
+    --muted-foreground: 0.52 0.04 225;
+
+    /* accent: sky tint */
+    --accent: 0.88 0.045 220;
+    --accent-foreground: 0.3 0.06 230;
+
+    /* destructive */
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 0.985 0 0;
+
+    /* border / input: soft blue-gray */
+    --border: 0.875 0.035 218;
+    --input: 0.875 0.035 218;
+    --ring: 0.58 0.13 228;
+
+    /* chart colors */
+    --chart-1: 0.58 0.13 228;
+    --chart-2: 0.72 0.09 210;
+    --chart-3: 0.44 0.1 240;
+    --chart-4: 0.82 0.07 200;
+    --chart-5: 0.65 0.12 215;
+
+    /* sidebar */
+    --sidebar: 0.985 0.008 220;
+    --sidebar-foreground: 0.26 0.04 230;
+    --sidebar-primary: 0.58 0.13 228;
+    --sidebar-primary-foreground: 0.98 0.005 220;
+    --sidebar-accent: 0.93 0.03 220;
+    --sidebar-accent-foreground: 0.35 0.06 228;
+    --sidebar-border: 0.875 0.035 218;
+    --sidebar-ring: 0.58 0.13 228;
+
+    /* Custom tokens */
+    --bubble-user: 0.74 0.1 228;
+    --bubble-user-foreground: 0.18 0.05 240;
+    --bubble-assistant: 0.995 0.004 220;
+    --bubble-assistant-foreground: 0.26 0.04 230;
+
+    --cloud-soft: 0.965 0.022 218;
+    --cloud-medium: 0.88 0.055 222;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Figtree", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(var(--cloud-medium));
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(var(--primary) / 0.5);
+}
+
+/* Chat message area */
+.chat-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Soft cloud background pattern */
+.cloud-bg {
+  background-image: url("/assets/generated/cloudshare-hero-bg.dim_1920x1080.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+/* Gentle floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.float-anim {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Typing indicator pulse */
+@keyframes typing-dot {
+  0%, 60%, 100% { opacity: 0.2; transform: scale(0.8); }
+  30% { opacity: 1; transform: scale(1); }
+}
+
+.typing-dot:nth-child(1) { animation: typing-dot 1.2s ease-in-out infinite; }
+.typing-dot:nth-child(2) { animation: typing-dot 1.2s ease-in-out infinite 0.2s; }
+.typing-dot:nth-child(3) { animation: typing-dot 1.2s ease-in-out infinite 0.4s; }
