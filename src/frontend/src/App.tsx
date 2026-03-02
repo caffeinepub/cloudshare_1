@@ -42,7 +42,7 @@ function LoadingScreen() {
 }
 
 function AppContent() {
-  const { identity, isInitializing } = useInternetIdentity();
+  const { identity, isInitializing, loginStatus } = useInternetIdentity();
   const { isFetching: actorFetching } = useActor();
   const isAuthenticated = !!identity;
   const [timedOut, setTimedOut] = useState(false);
@@ -53,15 +53,24 @@ function AppContent() {
     refetch: refetchHasName,
   } = useHasAssistantName();
 
-  // Safety timeout — if loading takes more than 8 seconds, bail out and show auth page
+  // Safety timeout — bail out after 5 seconds no matter what
   useEffect(() => {
-    if (!isInitializing && !(isAuthenticated && actorFetching)) return;
-    const t = setTimeout(() => setTimedOut(true), 8000);
+    const t = setTimeout(() => setTimedOut(true), 5000);
     return () => clearTimeout(t);
-  }, [isInitializing, isAuthenticated, actorFetching]);
+  }, []);
 
-  // Show loading while initializing auth (unless timed out)
-  if (!timedOut && (isInitializing || (isAuthenticated && actorFetching))) {
+  // Reset timeout flag once we move past initializing
+  useEffect(() => {
+    if (loginStatus !== "initializing") {
+      setTimedOut(false);
+    }
+  }, [loginStatus]);
+
+  // Show loading only while initializing, and only if not yet timed out
+  const isStillLoading =
+    !timedOut && (isInitializing || (isAuthenticated && actorFetching));
+
+  if (isStillLoading) {
     return <LoadingScreen />;
   }
 
@@ -71,7 +80,7 @@ function AppContent() {
   }
 
   // Logged in but checking if name is set
-  if (nameLoading) {
+  if (nameLoading && !timedOut) {
     return <LoadingScreen />;
   }
 
