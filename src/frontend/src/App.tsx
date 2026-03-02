@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { Cloud } from "lucide-react";
 import { motion } from "motion/react";
+import { useEffect, useState } from "react";
 import AuthPage from "./components/AuthPage";
 import ChatPage from "./components/ChatPage";
 import OnboardingPage from "./components/OnboardingPage";
@@ -44,6 +45,7 @@ function AppContent() {
   const { identity, isInitializing } = useInternetIdentity();
   const { isFetching: actorFetching } = useActor();
   const isAuthenticated = !!identity;
+  const [timedOut, setTimedOut] = useState(false);
 
   const {
     data: hasName,
@@ -51,8 +53,15 @@ function AppContent() {
     refetch: refetchHasName,
   } = useHasAssistantName();
 
-  // Show loading while initializing auth
-  if (isInitializing || (isAuthenticated && actorFetching)) {
+  // Safety timeout — if loading takes more than 8 seconds, bail out and show auth page
+  useEffect(() => {
+    if (!isInitializing && !(isAuthenticated && actorFetching)) return;
+    const t = setTimeout(() => setTimedOut(true), 8000);
+    return () => clearTimeout(t);
+  }, [isInitializing, isAuthenticated, actorFetching]);
+
+  // Show loading while initializing auth (unless timed out)
+  if (!timedOut && (isInitializing || (isAuthenticated && actorFetching))) {
     return <LoadingScreen />;
   }
 
